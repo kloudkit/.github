@@ -56,7 +56,7 @@ pre {
   margin-left: 0.35em;
   vertical-align: -0.05em;
   background-color: currentColor;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 11.5l7-7M6 4.5h5.5V10'/%3E%3C/svg%3E")
+  mask: url("/ext.svg")
     center / contain no-repeat;
 }
 
@@ -204,6 +204,15 @@ pre {
   outline-offset: 2px;
 }
 
+/* main.js marks the tool in view. */
+.family a[aria-current] {
+  color: var(--c);
+}
+
+.family a[aria-current]::before {
+  width: 2.5rem;
+}
+
 .org__link {
   align-self: flex-start;
   margin-top: auto;
@@ -254,7 +263,6 @@ pre {
   display: grid;
   gap: 1.25rem;
   max-width: 1180px;
-  margin-inline: auto;
   container: tools / inline-size;
 }
 
@@ -493,8 +501,6 @@ pre[data-copied] .copy {
 .tool--lead {
   --mark: 112px;
 
-  align-content: center;
-  min-height: min(62vh, 34rem);
   margin-bottom: 1.5rem;
   column-gap: 1.75rem;
   padding: 2.5rem 2.5rem 2.25rem;
@@ -568,6 +574,15 @@ pre[data-copied] .copy {
   }
 }
 
+/* Room after the last card, so every index link can bring its card to the top. */
+@media (min-width: 861px) {
+  .stream::after {
+    content: "";
+    display: block;
+    height: max(0px, calc(100vh - 22rem));
+  }
+}
+
 /* Links drop under the tagline when the header row runs out of room. */
 @media (max-width: 560px) {
   .tool {
@@ -624,7 +639,7 @@ pre[data-copied] .copy {
     position: static;
     height: auto;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
     align-content: start;
     column-gap: 1.25rem;
     padding: calc(2rem + env(safe-area-inset-top)) calc(1.25rem + env(safe-area-inset-right)) 1.75rem
@@ -672,11 +687,16 @@ pre[data-copied] .copy {
   }
 
   .org__about {
-    margin-top: 1.25rem;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 
   .org__link {
-    margin-top: 1rem;
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+    margin-top: 0;
   }
 
   .footer {

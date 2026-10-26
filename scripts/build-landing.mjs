@@ -1,6 +1,7 @@
 // Assembles the landing page into dist/landing: the hand-written files, the brand files,
 // the shared tokens and self-hosted fonts in place of Google Fonts.
-import { cp, mkdir, rm, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { cp, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const out = 'dist/landing'
@@ -51,5 +52,29 @@ for (const [pkg, family, weight] of fonts) {
 }
 
 await writeFile(join(out, 'fonts.css'), faces.join('\n\n') + '\n')
+
+// Stylesheets and the script move under /assets/ with a content hash in their names,
+// so a deploy never pairs new HTML with a cached old file.
+await mkdir(join(out, 'assets'), { recursive: true })
+
+const assets = {}
+
+for (const file of ['fonts.css', 'tokens.css', 'styles.css', 'main.js']) {
+  const hash = createHash('sha256').update(await readFile(join(out, file))).digest('hex').slice(0, 10)
+  const name = file.replace(/\.(\w+)$/, `.${hash}.$1`)
+
+  await rename(join(out, file), join(out, 'assets', name))
+  assets[`/${file}`] = `/assets/${name}`
+}
+
+for (const page of ['index.html', '404.html']) {
+  let html = await readFile(join(out, page), 'utf8')
+
+  for (const [from, to] of Object.entries(assets)) {
+    html = html.replaceAll(`"${from}"`, `"${to}"`)
+  }
+
+  await writeFile(join(out, page), html)
+}
 
 console.log(`landing → ${out}`)

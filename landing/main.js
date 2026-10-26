@@ -76,6 +76,44 @@
         });
       }
     },
+
+    // The tool index marks the card near the top of the screen.
+    current() {
+      const links = new Map(
+        [...document.querySelectorAll('.family a[href^="#"]')].map((a) => [a.hash.slice(1), a]),
+      );
+
+      if (!links.size || !("IntersectionObserver" in window)) {
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) {
+              continue;
+            }
+
+            for (const [id, link] of links) {
+              if (id === entry.target.id) {
+                link.setAttribute("aria-current", "true");
+              } else {
+                link.removeAttribute("aria-current");
+              }
+            }
+          }
+        },
+        { rootMargin: "-12% 0px -80% 0px" },
+      );
+
+      for (const id of links.keys()) {
+        const card = document.getElementById(id);
+
+        if (card) {
+          observer.observe(card);
+        }
+      }
+    },
   };
 
   for (const run of Object.values(enhancements)) {
