@@ -21,6 +21,7 @@ const fonts = [
   ['nunito-sans', 'Nunito Sans', 400],
   ['nunito-sans', 'Nunito Sans', 600],
   ['nunito-sans', 'Nunito Sans', 700],
+  ['nunito-sans', 'Nunito Sans', 800],
   ['fira-code', 'Fira Code', 400],
 ]
 

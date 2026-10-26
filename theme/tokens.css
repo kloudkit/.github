@@ -30,6 +30,12 @@
   --blue: #8caaee;
   --lavender: #babbf1;
 
+  /* KloudKIT brand */
+  --brand-white: #fff;
+  --brand-mint: #9cebcd;
+
+  --font-brand: "Nunito Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   --font-sans: "Fira Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;

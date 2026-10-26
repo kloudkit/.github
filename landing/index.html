@@ -99,76 +99,102 @@
   </head>
 
   <body>
-    <!-- One segment per tool, in each tool's lead colour. -->
-    <div class="topbar" aria-hidden="true"></div>
     <div class="backdrop" aria-hidden="true"></div>
 
-    <main class="stage">
-      <!-- KloudKIT itself, as a panel: the four tools' colours run down its right edge. -->
-      <a class="masthead" href="https://github.com/kloudkit" rel="noopener">
-        <span class="brand">
-          <img class="mark" src="/logo.svg" alt="" width="460" height="460" decoding="async" />
+    <!-- KloudKIT stays in view while its tools scroll past. -->
+    <aside class="org">
+      <img class="mark" src="/logo.svg" alt="" width="460" height="460" decoding="async" />
+      <h1 class="wordmark">Kloud<span>KIT</span></h1>
+      <p class="tagline">Your KIT to the cloud</p>
+      <p class="org__about">
+        Open-source tools that take the friction out of everyday development.
+        Kloud Workspace leads the way: a complete dev environment, ready the moment it starts.
+      </p>
+      <p class="org__about">Smaller tools speed up testing, debugging and local services.</p>
 
-          <span>
-            <h1 class="wordmark">Kloud<span>KIT</span></h1>
-            <span class="tagline">Your KIT to the cloud</span>
-            <span class="masthead__about">
-              <span>Open-source tools that take the friction out of everyday development.</span>
-              <span>Kloud Workspace leads the way: a complete dev environment, ready the moment it starts.</span>
-              <span>Smaller tools speed up testing, debugging and local services.</span>
-            </span>
-          </span>
-        </span>
+      <!-- One segment per tool, in each tool's lead colour. -->
+      <div class="family" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
-        <span class="masthead__link">GitHub <span aria-hidden="true">↗</span></span>
-      </a>
+      <a class="org__link ext" href="https://github.com/kloudkit" rel="noopener"><span class="vh">KloudKIT on </span>GitHub</a>
 
-      <!-- One panel per tool, each in its own logo's colours. The name's link covers the whole card. -->
+      <footer class="footer">
+        <span>&copy; <span id="year">2026</span> KloudKIT</span>
+      </footer>
+    </aside>
+
+    <main class="stream">
       <section class="tools" aria-label="Tools">
-        <article id="workspace" class="tool tool--workspace">
+        <article id="workspace" class="tool tool--workspace tool--lead">
           <img class="tool__icon" src="/tools/workspace.svg" alt="" width="80" height="80" />
-          <h2 class="tool__name"><a class="tool__main" href="https://ws.kloudkit.com" rel="noopener">Kloud Workspace</a></h2>
-          <span class="tool__tagline">Configured development</span>
-          <span class="tool__links">
-            <a href="https://ws.kloudkit.com" rel="noopener">Docs <span aria-hidden="true">↗</span></a>
-            <a href="https://github.com/kloudkit/workspace" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-          </span>
+          <h2 class="tool__name">Kloud Workspace</h2>
+          <p class="tool__tagline">Configured development</p>
+
+          <dl class="tool__spec">
+            <div><dt>What it is</dt><dd>A batteries-included, pre-configured development workspace inside a Docker container: run customized VS Code in the browser or over SSH.</dd></div>
+            <div><dt>Ships as</dt><dd>Container image</dd></div>
+            <div class="tool__try"><dt>Try it</dt><dd><pre><code>docker run -p 8080:8080 \
+  ghcr.io/kloudkit/workspace:latest</code></pre></dd></div>
+          </dl>
+
+          <p class="tool__links">
+            <a class="ext" href="https://ws.kloudkit.com" rel="noopener">Docs<span class="vh"> for Kloud Workspace</span></a>
+            <a class="ext" href="https://github.com/kloudkit/ws-meta" rel="noopener"><span class="vh">Kloud Workspace on </span>GitHub</a>
+          </p>
         </article>
 
         <article id="testshed" class="tool tool--testshed">
           <img class="tool__icon" src="/tools/testshed.svg" alt="" width="80" height="80" />
-          <h2 class="tool__name"><a class="tool__main" href="https://testshed.kloudkit.com" rel="noopener">TestShed</a></h2>
-          <span class="tool__tagline">The support crew for your test bench</span>
-          <span class="tool__links">
-            <a href="https://testshed.kloudkit.com" rel="noopener">Docs <span aria-hidden="true">↗</span></a>
-            <a href="https://github.com/kloudkit/testshed" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-          </span>
+          <h2 class="tool__name">TestShed</h2>
+          <p class="tool__tagline">The support crew for your test bench</p>
+
+          <dl class="tool__spec">
+            <div><dt>What it is</dt><dd>A pytest plugin that hands your tests real Docker containers and Playwright browsers as fixtures.</dd></div>
+            <div><dt>Ships as</dt><dd>Python package</dd></div>
+            <div class="tool__try"><dt>Try it</dt><dd><pre><code>pip install testshed</code></pre></dd></div>
+          </dl>
+
+          <p class="tool__links">
+            <a class="ext" href="https://testshed.kloudkit.com" rel="noopener">Docs<span class="vh"> for TestShed</span></a>
+            <a class="ext" href="https://github.com/kloudkit/testshed" rel="noopener"><span class="vh">TestShed on </span>GitHub</a>
+          </p>
         </article>
 
         <article id="looking-glass" class="tool tool--looking-glass">
           <img class="tool__icon" src="/tools/looking-glass.svg" alt="" width="80" height="80" />
-          <h2 class="tool__name"><a class="tool__main" href="https://lookingglass.kloudkit.com" rel="noopener">Looking Glass</a></h2>
-          <span class="tool__tagline">See exactly what is hitting your service</span>
-          <span class="tool__links">
-            <a href="https://lookingglass.kloudkit.com" rel="noopener">Docs <span aria-hidden="true">↗</span></a>
-            <a href="https://github.com/kloudkit/looking-glass" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-          </span>
+          <h2 class="tool__name">Looking Glass</h2>
+          <p class="tool__tagline">See exactly what is hitting your service</p>
+
+          <dl class="tool__spec">
+            <div><dt>What it is</dt><dd>A drop-in HTTP request reflector: every request, on any method and path, answered with exactly what arrived.</dd></div>
+            <div><dt>Ships as</dt><dd>Container image</dd></div>
+            <div class="tool__try"><dt>Try it</dt><dd><pre><code>docker run --rm -p 8080:8080 \
+  ghcr.io/kloudkit/looking-glass:latest</code></pre></dd></div>
+          </dl>
+
+          <p class="tool__links">
+            <a class="ext" href="https://lookingglass.kloudkit.com" rel="noopener">Docs<span class="vh"> for Looking Glass</span></a>
+            <a class="ext" href="https://github.com/kloudkit/looking-glass" rel="noopener"><span class="vh">Looking Glass on </span>GitHub</a>
+          </p>
         </article>
 
         <article id="portico" class="tool tool--portico">
           <img class="tool__icon" src="/tools/portico.svg" alt="" width="80" height="80" />
-          <h2 class="tool__name"><a class="tool__main" href="https://portico.kloudkit.com" rel="noopener">Portico</a></h2>
-          <span class="tool__tagline">Many services, one front door</span>
-          <span class="tool__links">
-            <a href="https://portico.kloudkit.com" rel="noopener">Docs <span aria-hidden="true">↗</span></a>
-            <a href="https://github.com/kloudkit/portico" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-          </span>
+          <h2 class="tool__name">Portico</h2>
+          <p class="tool__tagline">Many services, one front door</p>
+
+          <dl class="tool__spec">
+            <div><dt>What it is</dt><dd>Run every service of a web app and put one origin in front of them: one port, no CORS.</dd></div>
+            <div><dt>Ships as</dt><dd>Linux binary or Go module</dd></div>
+            <div class="tool__try"><dt>Try it</dt><dd><pre><code>go install \
+  github.com/kloudkit/portico@latest</code></pre></dd></div>
+          </dl>
+
+          <p class="tool__links">
+            <a class="ext" href="https://portico.kloudkit.com" rel="noopener">Docs<span class="vh"> for Portico</span></a>
+            <a class="ext" href="https://github.com/kloudkit/portico" rel="noopener"><span class="vh">Portico on </span>GitHub</a>
+          </p>
         </article>
       </section>
     </main>
-
-    <footer class="footer">
-      <span>&copy; <span id="year">2026</span> KloudKIT</span>
-    </footer>
   </body>
 </html>

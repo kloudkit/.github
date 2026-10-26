@@ -1,11 +1,5 @@
 /* KloudKIT — landing page. Palette and fonts come from tokens.css. */
 
-:root {
-  /* The landing page's own face; the docs keep Fira Sans from tokens.css. */
-  --font-sans: "Nunito Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-}
-
 *,
 *::before,
 *::after {
@@ -13,186 +7,187 @@
 }
 
 html {
-  height: 100%;
+  scrollbar-color: var(--surface1) var(--base);
 }
 
 body {
   margin: 0;
-  /* Full-screen when it fits; scrolls on short or narrow screens. */
-  min-height: 100%;
-  overflow-x: hidden;
+  min-height: 100vh;
   display: grid;
-  grid-template-rows: 1fr auto;
-  justify-items: center;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
+  grid-template-columns: clamp(300px, 27vw, 400px) minmax(0, 1fr);
 
   background-color: var(--base);
   color: var(--text);
-  font-family: var(--font-sans);
+  font-family: var(--font-brand);
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* ── Backdrop ─────────────────────────────────────────────────────────── */
+::selection {
+  background-color: color-mix(in srgb, var(--lavender) 35%, transparent);
+  color: var(--brand-white);
+}
+
+p,
+dl,
+dd,
+pre {
+  margin: 0;
+}
+
+/* Read by screen readers, not shown. */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* An outbound link: a drawn arrow after the label, in the link's own colour. */
+.ext::after {
+  content: "";
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 0.35em;
+  vertical-align: -0.05em;
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 11.5l7-7M6 4.5h5.5V10'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
 
 /* Flat ground with a still dot grid. */
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   background-color: var(--base);
-  background-image: radial-gradient(circle, rgba(198, 208, 245, 0.07) 1px, transparent 1.5px);
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--text) 7%, transparent) 1px,
+    transparent 1.5px
+  );
   background-size: 28px 28px;
 }
 
-.topbar {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: 2;
-  height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--blue) 25%,
-    var(--green) 25% 50%,
-    var(--lavender) 50% 75%,
-    var(--teal) 75%
-  );
-}
+/* ── Org column ───────────────────────────────────────────────────────── */
 
-/* ── Stage ────────────────────────────────────────────────────────────── */
-
-.stage {
-  position: relative;
-  z-index: 1;
-  align-self: center;
-  width: min(1200px, 100vw - 2.5rem);
-  padding-block: clamp(2rem, 6vmin, 3.5rem) clamp(1.5rem, 4vmin, 2.5rem);
-}
-
-/* KloudKIT as a full-width panel, styled and behaving like the tool panels. */
-.masthead {
-  position: relative;
+.org {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem 2rem;
-  padding: 1.5rem 2.25rem 1.5rem 1.75rem;
-  overflow: hidden;
-  border: 1px solid var(--surface0);
-  border-radius: 16px;
-  background-color: var(--mantle);
-  color: var(--text);
-  text-decoration: none;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease;
-}
-
-/* One segment per tool, top to bottom. */
-.masthead::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 0 auto;
-  width: 5px;
-  background: linear-gradient(
-    180deg,
-    var(--blue) 25%,
-    var(--green) 25% 50%,
-    var(--lavender) 50% 75%,
-    var(--teal) 75%
-  );
-}
-
-.masthead:hover,
-.masthead:focus-visible {
-  transform: translateY(-2px);
-  border-color: var(--lavender);
-}
-
-.masthead:focus-visible {
-  outline: 2px solid var(--lavender);
-  outline-offset: 3px;
-}
-
-.masthead__about {
-  grid-column: 2;
-  display: block;
-  margin-top: 0.9rem;
-  font-size: 0.98rem;
-  line-height: 1.55;
-  color: var(--subtext0);
-}
-
-/* One sentence per line. */
-.masthead__about > span {
-  display: block;
-}
-
-.masthead__link {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--lavender);
-}
-
-.brand {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  column-gap: 1.75rem;
-}
-
-/* Let the wordmark, tagline and about text sit on the brand's own grid. */
-.brand > span {
-  display: contents;
+  flex-direction: column;
+  padding: calc(clamp(2.5rem, 7vh, 4.5rem) + env(safe-area-inset-top)) clamp(1.75rem, 3vw, 3.25rem)
+    calc(1.5rem + env(safe-area-inset-bottom)) calc(clamp(1.75rem, 3vw, 3.25rem) + env(safe-area-inset-left));
+  border-right: 1px solid var(--surface0);
+  background-color: var(--crust);
 }
 
 .mark {
-  /* As tall as the wordmark, tagline and about text beside it. */
-  grid-row: 1 / span 3;
-  width: 132px;
+  width: 112px;
   height: auto;
+  margin-bottom: 1.75rem;
   border-radius: 50%;
   border: 1px solid var(--surface1);
 }
 
 .wordmark {
   margin: 0;
-  font-size: clamp(2rem, 5vmin, 2.6rem);
-  font-weight: 700;
+  font-size: clamp(2.6rem, 4vw, 3.4rem);
+  font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.05;
-  color: #fff;
+  line-height: 1;
+  color: var(--brand-white);
 }
 
+/* As in the logo: a heavy "Kloud", a light red "KIT". */
 .wordmark span {
   font-weight: 300;
   letter-spacing: 0.005em;
-  color: var(--lavender);
+  color: var(--red);
 }
 
 .tagline {
-  display: block;
-  margin: 0.35rem 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
+  margin-top: 0.6rem;
+  font-size: 1.3rem;
   font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
   color: var(--lavender);
 }
 
-/* ── Tools ────────────────────────────────────────────────────────────── */
+.org__about {
+  margin-top: 1.5rem;
+  max-width: 34ch;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--subtext0);
+}
 
-/* Each panel takes two accents from its own logo. */
+.org__about + .org__about {
+  margin-top: 1em;
+}
+
+.family {
+  display: flex;
+  gap: 6px;
+  max-width: 34ch;
+  margin-top: 1.75rem;
+}
+
+.family span {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+}
+
+.family span:nth-child(1) {
+  background-color: var(--blue);
+}
+
+.family span:nth-child(2) {
+  background-color: var(--green);
+}
+
+.family span:nth-child(3) {
+  background-color: var(--lavender);
+}
+
+.family span:nth-child(4) {
+  background-color: var(--teal);
+}
+
+.org__link {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-block: 0.75rem;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  color: var(--lavender);
+  text-decoration: none;
+}
+
+.footer {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--overlay2);
+}
+
+/* ── Tool stream ──────────────────────────────────────────────────────── */
+
+.stream {
+  padding: calc(clamp(2.5rem, 7vh, 4.5rem) + env(safe-area-inset-top))
+    calc(clamp(1.5rem, 4vw, 3.5rem) + env(safe-area-inset-right))
+    calc(clamp(2rem, 6vh, 4rem) + env(safe-area-inset-bottom)) clamp(1.5rem, 4vw, 3.5rem);
+}
+
+/* Each tool takes two accents from its own logo. */
 .tool--workspace {
   --a: var(--blue);
-  --b: #9cebcd;
+  --b: var(--brand-mint);
 }
 
 .tool--testshed {
@@ -210,76 +205,23 @@ body {
   --b: var(--peach);
 }
 
+/* Kloud Workspace first and largest; the smaller tools follow as rows. */
 .tools {
-  /* Wider than the hero, so four panels fit on one row. */
-  margin-top: clamp(2rem, 5vmin, 3rem);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.25rem;
-  text-align: left;
-}
-
-@media (max-width: 960px) {
-  .tools {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 540px) {
-  .tools {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .tool__icon {
-    width: 88px;
-    height: 88px;
-  }
-
-  .tagline {
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    white-space: nowrap;
-  }
-
-  .masthead {
-    padding: 1.1rem 1.4rem 1.1rem 1.1rem;
-  }
-
-  .brand {
-    column-gap: 1rem;
-  }
-
-  .mark {
-    grid-row: 1 / span 2;
-    width: 64px;
-  }
-
-  .masthead__about {
-    grid-column: 1 / -1;
-  }
-
-  .masthead__link {
-    display: none;
-  }
+  max-width: 1080px;
 }
 
 .tool {
   position: relative;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  justify-items: center;
-  gap: 0.4rem;
-  padding: 2.4rem 1.5rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem 1.5rem 1.25rem;
   overflow: hidden;
   border: 1px solid var(--surface0);
   border-radius: 16px;
   background-color: var(--mantle);
-  color: var(--text);
-  text-align: center;
-  text-decoration: none;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease;
+  transition: border-color 0.18s ease;
 }
 
 /* The tool's two colours, as a flat bar across the top. */
@@ -287,38 +229,19 @@ body {
   content: "";
   position: absolute;
   inset: 0 0 auto;
-  height: 5px;
+  height: 4px;
   background: linear-gradient(90deg, var(--a) 50%, var(--b) 50%);
 }
 
 .tool:hover,
 .tool:focus-within {
-  transform: translateY(-2px);
-  border-color: var(--a);
-}
-
-.tool:has(.tool__main:focus-visible) {
-  outline: 2px solid var(--a);
-  outline-offset: 3px;
-}
-
-/* The name links to the docs; its ::after stretches that link over the whole card. */
-.tool__main {
-  color: inherit;
-  text-decoration: none;
-  outline: none;
-}
-
-.tool__main::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+  border-color: color-mix(in srgb, var(--a) 60%, var(--surface0));
 }
 
 .tool__icon {
-  width: 112px;
-  height: 112px;
-  margin-bottom: 1.1rem;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
   object-fit: contain;
 }
 
@@ -327,32 +250,124 @@ body {
   font-size: 1.4rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--text);
+  line-height: 1.2;
 }
 
 .tool__tagline {
-  max-width: 24ch;
+  margin-top: 0.2rem;
   font-size: 1rem;
   line-height: 1.45;
-  color: var(--subtext0);
+  color: var(--subtext1);
   text-wrap: balance;
 }
 
-.tool__links {
-  margin-top: 1.4rem;
-  display: flex;
-  gap: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+/* What it is, how it ships and how to try it, as labelled facts. */
+.tool__spec {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--surface0);
 }
 
-/* Above the stretched docs link, so each stays clickable on its own.
-   Each link takes the colour of the bar half above it: docs left, GitHub right. */
-.tool__links a {
+.tool__spec dt {
+  margin-bottom: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--overlay2);
+}
+
+.tool__spec dd {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--subtext0);
+}
+
+.tool__try dt {
+  margin-bottom: 0.35rem;
+}
+
+pre {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  background-color: var(--crust);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--a);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* main.js makes each command a copy button; without script it stays selectable text. */
+/* The badge sits over the first line, which the two-line commands keep short. */
+pre.is-copyable {
   position: relative;
-  z-index: 1;
+  cursor: copy;
+  transition: border-color 0.15s ease;
+}
+
+pre.is-copyable:hover,
+pre.is-copyable:focus-visible {
+  border-color: color-mix(in srgb, var(--a) 70%, var(--surface0));
+}
+
+pre.is-copyable:focus-visible {
+  outline: 2px solid var(--a);
+  outline-offset: 2px;
+}
+
+.copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.55rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--surface1);
+  border-radius: 6px;
+  background-color: var(--mantle);
+  color: var(--subtext0);
+  font: 600 0.72rem / 1.3 var(--font-brand);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+pre:hover .copy,
+pre:focus-visible .copy,
+pre[data-copied] .copy {
+  opacity: 1;
+}
+
+pre[data-copied] .copy {
+  border-color: var(--a);
+  color: var(--a);
+}
+
+/* Without hover the badge stays visible, so it moves up beside the "Try it" label. */
+@media (hover: none) {
+  .copy {
+    top: auto;
+    right: 0;
+    bottom: calc(100% + 0.3rem);
+    opacity: 1;
+  }
+}
+
+.tool__links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.tool__links a {
+  white-space: nowrap;
+  margin-block: -0.75rem;
+  padding-block: 0.75rem;
+  border-radius: 6px;
   color: var(--a);
   text-decoration: none;
 }
@@ -362,31 +377,378 @@ body {
 }
 
 .tool__links a:hover,
-.tool__links a:focus-visible {
+.org__link:hover {
   text-decoration: underline;
   text-underline-offset: 0.3em;
 }
 
-/* ── Footer ───────────────────────────────────────────────────────────── */
+.tool__links a:focus-visible,
+.org__link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
 
-.footer {
-  position: relative;
-  z-index: 1;
-  padding-block: 1rem calc(1.5rem + env(safe-area-inset-bottom));
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  color: var(--surface2);
+/* The lead: icon beside its name, facts in a row, the command at full width. */
+.tool--lead {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 2rem;
+  padding: 2.25rem 2.25rem 1.5rem;
+}
+
+.tool--lead .tool__icon {
+  grid-row: 1 / span 2;
+  width: 112px;
+  height: 112px;
+  margin: 0;
+}
+
+.tool--lead .tool__name {
+  align-self: end;
+  font-size: clamp(1.9rem, 3vw, 2.5rem);
+  letter-spacing: -0.02em;
+}
+
+.tool--lead .tool__tagline {
+  font-size: 1.2rem;
+}
+
+.tool--lead .tool__spec,
+.tool--lead .tool__links {
+  grid-column: 1 / -1;
+}
+
+.tool--lead .tool__spec {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  column-gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.tool--lead .tool__try {
+  grid-column: 1 / -1;
+}
+
+.tool--lead pre {
+  padding: 1rem 1.2rem;
+  font-size: 0.95rem;
+}
+
+.tool--lead .tool__spec dd {
+  font-size: 1.02rem;
+}
+
+.tool--lead .tool__links {
+  font-size: 1.02rem;
+}
+
+/* ── Narrower screens ─────────────────────────────────────────────────── */
+
+/* Wide enough: a smaller tool's name sits left of its facts. */
+@media (min-width: 1000px) and (max-width: 1279px) {
+  .tool:not(.tool--lead) {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      "icon spec"
+      "name spec"
+      "tag spec"
+      "links spec";
+    column-gap: 2rem;
+  }
+
+  .tool:not(.tool--lead) .tool__icon {
+    grid-area: icon;
+  }
+
+  .tool:not(.tool--lead) .tool__name {
+    grid-area: name;
+  }
+
+  .tool:not(.tool--lead) .tool__tagline {
+    grid-area: tag;
+  }
+
+  .tool:not(.tool--lead) .tool__links {
+    grid-area: links;
+    align-self: end;
+  }
+
+  .tool:not(.tool--lead) .tool__spec {
+    grid-area: spec;
+    margin-top: 0;
+    padding-top: 0;
+    padding-left: 2rem;
+    border-top: 0;
+    border-left: 1px solid var(--surface0);
+  }
+}
+
+/* Wide screens: every card sits on one shared grid, so marks, names, facts and
+   commands line up down the page. */
+@media (min-width: 1280px) {
+  .stream {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    padding: clamp(2rem, 6vh, 4.5rem) clamp(1.5rem, 3vw, 3rem);
+  }
+
+  /* The first column carries the card's own left padding, which a subgrid takes from it. */
+  .tools {
+    grid-template-columns: calc(96px + 1.75rem) minmax(0, 9rem) minmax(0, 0.8fr) minmax(0, 1.4fr);
+    column-gap: 1.75rem;
+    row-gap: 1.25rem;
+    width: 100%;
+    max-width: 1180px;
+    margin-inline: auto;
+  }
+
+  /* Every card: mark and name on top, then what it is beside the command, then
+     links beside how it ships. The lead is the same card at a larger size. */
+  .tool,
+  .tool--lead {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: auto auto auto auto;
+    row-gap: 0.5rem;
+    padding: 1.6rem 1.75rem 1.4rem;
+  }
+
+  .tool .tool__spec {
+    display: contents;
+  }
+
+  .tool .tool__icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: center;
+    width: 80px;
+    height: 80px;
+    margin: 0;
+  }
+
+  .tool .tool__name {
+    grid-column: 2 / -1;
+    grid-row: 1;
+    align-self: end;
+    font-size: 1.5rem;
+  }
+
+  .tool .tool__tagline {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    font-size: 1.02rem;
+  }
+
+  .tool .tool__spec > div:first-child,
+  .tool .tool__try {
+    margin-top: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--surface0);
+  }
+
+  .tool .tool__spec > div:first-child {
+    grid-column: 2 / span 2;
+    grid-row: 3;
+  }
+
+  .tool .tool__links {
+    grid-column: 2;
+    grid-row: 4;
+    align-self: end;
+    padding-top: 0;
+  }
+
+  .tool .tool__spec > div:nth-child(2) {
+    grid-column: 3;
+    grid-row: 4;
+  }
+
+  .tool .tool__try {
+    grid-column: 4;
+    grid-row: 3 / span 2;
+  }
+
+  .tool--lead {
+    padding-block: 2rem 1.75rem;
+  }
+
+  .tool--lead .tool__icon {
+    width: 96px;
+    height: 96px;
+  }
+
+  .tool--lead .tool__name {
+    font-size: 2.4rem;
+  }
+
+  .tool--lead .tool__tagline {
+    font-size: 1.15rem;
+  }
+
+  .tool--lead .tool__spec > div:first-child dd,
+  .tool--lead .tool__links {
+    font-size: 1rem;
+  }
+
+  .tool--lead pre {
+    padding: 0.75rem 1rem;
+    font-size: clamp(0.78rem, 0.9vw, 0.9rem);
+  }
+
+  .tool__spec dd {
+    font-size: 0.95rem;
+  }
+
+  pre {
+    font-size: clamp(0.76rem, 0.85vw, 0.85rem);
+  }
+}
+
+/* The narrowest wide screens: more room for the command column. */
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .tools {
+    grid-template-columns: calc(80px + 1.75rem) minmax(0, 8.5rem) minmax(0, 0.8fr) minmax(0, 1.45fr);
+    column-gap: 1.4rem;
+  }
+
+  .tool .tool__icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .tool--lead .tool__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  pre,
+  .tool--lead pre {
+    padding-inline: 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .tool__links,
+  .tool--lead .tool__links {
+    gap: 1.1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* The column becomes a header above the stream. */
+@media (max-width: 860px) {
+  body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .org {
+    position: static;
+    height: auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.25rem;
+    padding: calc(2rem + env(safe-area-inset-top)) calc(1.25rem + env(safe-area-inset-right)) 1.75rem
+      calc(1.25rem + env(safe-area-inset-left));
+    border-right: 0;
+    border-bottom: 1px solid var(--surface0);
+  }
+
+  .mark {
+    grid-row: 1 / span 2;
+    width: 72px;
+    margin: 0;
+  }
+
+  .wordmark {
+    align-self: end;
+    font-size: 2.4rem;
+  }
+
+  .tagline {
+    margin-top: 0.25rem;
+    font-size: 1.1rem;
+  }
+
+  .org__about,
+  .family,
+  .org__link,
+  .footer {
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+
+  .org__about {
+    margin-top: 1.25rem;
+  }
+
+  .org__link {
+    margin-top: 1rem;
+  }
+
+  .footer {
+    display: none;
+  }
+
+  .stream {
+    padding: 1.5rem calc(1.25rem + env(safe-area-inset-right)) calc(2.5rem + env(safe-area-inset-bottom))
+      calc(1.25rem + env(safe-area-inset-left));
+  }
+
+  .tool--lead {
+    padding: 1.75rem 1.5rem 1.25rem;
+    column-gap: 1.25rem;
+  }
+
+  .tool--lead .tool__icon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .tool--lead .tool__spec {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  pre,
+  .tool--lead pre {
+    font-size: 0.7rem;
+  }
+}
+
+/* ── Not found ────────────────────────────────────────────────────────── */
+
+.lost {
+  align-self: center;
+  max-width: 40rem;
+}
+
+.lost h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--brand-white);
+}
+
+.lost p {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: var(--subtext0);
+}
+
+.lost a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding-block: 0.75rem;
+  color: var(--lavender);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .masthead,
-  .tool {
+  .tool,
+  .copy {
     transition: none;
-  }
-
-  .masthead:hover,
-  .tool:hover {
-    transform: none;
   }
 }
