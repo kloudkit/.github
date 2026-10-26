@@ -158,7 +158,11 @@
           <dl class="tool__spec">
             <div><dt>What it is</dt><dd>A pytest plugin that hands your tests real Docker containers and Playwright browsers as fixtures.</dd></div>
             <div><dt>Ships as</dt><dd>Python package</dd></div>
-            <div class="tool__try"><dt>Try it</dt><dd><pre><code>pip install testshed</code></pre></dd></div>
+            <div class="tool__try"><dt>Try it</dt><dd><ol class="steps">
+              <li><pre><code>pip install testshed</code></pre></li>
+              <li><pre><code>pytest --shed \
+  --shed-image=ghcr.io/acme/app</code></pre></li>
+            </ol></dd></div>
           </dl>
         </article>
 
@@ -191,8 +195,11 @@
           <dl class="tool__spec">
             <div><dt>What it is</dt><dd>Run every service of a web app and put one origin in front of them: one port, no CORS.</dd></div>
             <div><dt>Ships as</dt><dd>Linux binary or Go module</dd></div>
-            <div class="tool__try"><dt>Try it</dt><dd><pre><code>go install \
-  github.com/kloudkit/portico@latest</code></pre></dd></div>
+            <div class="tool__try"><dt>Try it</dt><dd><ol class="steps">
+              <li><pre><code>go install \
+  github.com/kloudkit/portico@latest</code></pre></li>
+              <li><pre><code>portico init &amp;&amp; portico up</code></pre></li>
+            </ol></dd></div>
           </dl>
         </article>
       </section>

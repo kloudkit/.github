@@ -279,7 +279,9 @@ pre {
   border: 1px solid var(--surface0);
   border-radius: 16px;
   background-color: var(--mantle);
-  transition: border-color 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    transform 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 /* The tool's two colours, as a flat bar across the top. */
@@ -292,9 +294,14 @@ pre {
 }
 
 .tool:hover,
-.tool:has(:focus-visible),
-.tool:target {
+.tool:has(:focus-visible) {
   border-color: color-mix(in srgb, var(--a) 60%, var(--surface0));
+}
+
+/* The card an index link jumped to lifts out in its own colour. */
+.tool:target {
+  transform: translateY(-4px);
+  border-color: var(--a);
 }
 
 .tool__icon {
@@ -392,8 +399,13 @@ pre {
     flex-direction: column;
   }
 
-  .tool__try pre {
+  .tool__try pre,
+  .tool__try .steps {
     flex: 1;
+  }
+
+  .tool__try .steps {
+    grid-auto-rows: 1fr;
   }
 
   .tool__try pre {
@@ -442,6 +454,46 @@ pre {
   color: var(--a);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+/* A command in more than one step: each numbered, each copied on its own. */
+.steps {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  position: relative;
+  display: flex;
+  counter-increment: step;
+}
+
+.steps li > pre {
+  flex: 1;
+  padding-left: 1.6rem;
+}
+
+/* The step number sits on the command box's left edge, like a numbered part. */
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1.5px solid var(--a);
+  border-radius: 50%;
+  background-color: var(--mantle);
+  font: 700 0.75rem / 1 var(--font-brand);
+  color: var(--a);
+  transform: translate(-50%, -50%);
 }
 
 /* main.js makes each command a copy button; without script it stays selectable text.
@@ -494,6 +546,15 @@ pre[data-copied] .copy {
     right: 0;
     bottom: calc(100% + 0.3rem);
     opacity: 1;
+  }
+}
+
+/* Inside a list of steps the label row belongs to the whole list, so each badge stays in its box. */
+@media (hover: none) {
+  .steps .copy {
+    top: 0.45rem;
+    right: 0.5rem;
+    bottom: auto;
   }
 }
 
@@ -744,6 +805,10 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .tool:target {
+    transform: none;
   }
 
   .tool,
