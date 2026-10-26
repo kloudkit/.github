@@ -379,7 +379,7 @@ pre {
 }
 
 /* Wide enough: what it is over how it ships, the command beside both. */
-@container tools (min-width: 46rem) {
+@container tools (min-width: 52rem) {
   .tool__spec {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
     grid-template-rows: auto 1fr;
@@ -452,8 +452,18 @@ pre {
   font-size: 0.85rem;
   line-height: 1.6;
   color: var(--a);
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  white-space: pre;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  min-width: 0;
+}
+
+/* Grid and flex items grow to fit a long command unless told otherwise; keep them inside the card. */
+.tool__spec > div,
+.tool__try dd,
+.steps,
+.steps li {
+  min-width: 0;
 }
 
 /* A command in more than one step: each numbered, each copied on its own. */
