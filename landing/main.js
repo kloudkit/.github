@@ -36,7 +36,7 @@
         pre.classList.add("is-copyable");
         pre.tabIndex = 0;
         pre.setAttribute("role", "button");
-        pre.setAttribute("aria-label", `Copy the ${name} command`);
+        pre.prepend(Object.assign(document.createElement("span"), { className: "vh", textContent: "Copy command: " }));
         pre.append(badge);
 
         let timer;
