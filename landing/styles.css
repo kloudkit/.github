@@ -26,7 +26,7 @@ body {
 }
 
 ::selection {
-  background-color: color-mix(in srgb, var(--lavender) 35%, transparent);
+  background-color: color-mix(in srgb, var(--red) 35%, transparent);
   color: var(--brand-white);
 }
 
@@ -88,6 +88,15 @@ pre {
   background-color: var(--crust);
 }
 
+/* KloudKIT's own two colours, from its logo, as each tool card wears its own. */
+.org::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--red) 50%, var(--brand-mint) 50%);
+}
+
 .mark {
   width: 112px;
   height: auto;
@@ -116,12 +125,13 @@ pre {
   margin-top: 0.6rem;
   font-size: 1.3rem;
   font-weight: 400;
-  color: var(--lavender);
+  color: var(--subtext1);
 }
 
 .org__about {
   margin-top: 1.5rem;
   max-width: 34ch;
+  text-wrap: pretty;
   font-size: 1.02rem;
   line-height: 1.65;
   color: var(--subtext0);
@@ -131,33 +141,65 @@ pre {
   margin-top: 1em;
 }
 
+/* The tool index: each tool's lead colour as a segment beside its name. */
 .family {
-  display: flex;
-  gap: 6px;
+  display: grid;
+  gap: 0.15rem;
   max-width: 34ch;
   margin-top: 1.75rem;
 }
 
-.family span {
-  flex: 1;
+.family a {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-block: 0.45rem;
+  border-radius: 6px;
+  font-size: 0.98rem;
+  color: var(--subtext1);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.family a::before {
+  content: "";
+  flex: none;
+  width: 1.75rem;
   height: 5px;
   border-radius: 3px;
+  background-color: var(--c);
+  transition: width 0.15s ease;
 }
 
-.family span:nth-child(1) {
-  background-color: var(--blue);
+.family a:nth-child(1) {
+  --c: var(--blue);
 }
 
-.family span:nth-child(2) {
-  background-color: var(--green);
+.family a:nth-child(2) {
+  --c: var(--green);
 }
 
-.family span:nth-child(3) {
-  background-color: var(--lavender);
+.family a:nth-child(3) {
+  --c: var(--lavender);
 }
 
-.family span:nth-child(4) {
-  background-color: var(--teal);
+.family a:nth-child(4) {
+  --c: var(--teal);
+}
+
+.family a:hover,
+.family a:focus-visible {
+  color: var(--c);
+}
+
+.family a:hover::before,
+.family a:focus-visible::before {
+  width: 2.5rem;
+}
+
+.family a:focus-visible {
+  outline: 2px solid var(--c);
+  outline-offset: 2px;
 }
 
 .org__link {
@@ -166,7 +208,7 @@ pre {
   padding-block: 0.75rem;
   border-radius: 6px;
   font-size: 1.05rem;
-  color: var(--lavender);
+  color: var(--red);
   text-decoration: none;
 }
 
@@ -205,22 +247,28 @@ pre {
   --b: var(--peach);
 }
 
-/* Kloud Workspace first and largest; the smaller tools follow as rows. */
+/* Kloud Workspace first and largest; the smaller tools follow. */
 .tools {
   display: grid;
   gap: 1.25rem;
-  max-width: 1080px;
+  max-width: 1180px;
+  margin-inline: auto;
 }
 
+/* A card: mark, name and tagline with its links on top, then its facts. */
 .tool {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 1.75rem 1.5rem 1.25rem;
+  display: grid;
+  grid-template-columns: var(--mark, 64px) minmax(0, 1fr) auto;
+  column-gap: 1.25rem;
+  row-gap: 0.15rem;
+  padding: 1.6rem 1.75rem 1.5rem;
   overflow: hidden;
+  scroll-margin-top: 1.5rem;
   border: 1px solid var(--surface0);
   border-radius: 16px;
   background-color: var(--mantle);
+  container-type: inline-size;
   transition: border-color 0.18s ease;
 }
 
@@ -234,44 +282,127 @@ pre {
 }
 
 .tool:hover,
-.tool:focus-within {
+.tool:has(:focus-visible),
+.tool:target {
   border-color: color-mix(in srgb, var(--a) 60%, var(--surface0));
 }
 
 .tool__icon {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 1rem;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: var(--mark, 64px);
+  height: var(--mark, 64px);
   object-fit: contain;
 }
 
 .tool__name {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.2;
 }
 
 .tool__tagline {
-  margin-top: 0.2rem;
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
   font-size: 1rem;
   line-height: 1.45;
   color: var(--subtext1);
   text-wrap: balance;
 }
 
+.tool__links {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.tool__links a {
+  white-space: nowrap;
+  margin-block: -0.75rem;
+  padding-block: 0.75rem;
+  border-radius: 6px;
+  color: var(--a);
+  text-decoration: none;
+}
+
+.tool__links a + a {
+  color: var(--b);
+}
+
+.tool__links a:hover,
+.org__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.tool__links a:focus-visible,
+.org__link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 /* What it is, how it ships and how to try it, as labelled facts. */
 .tool__spec {
+  grid-column: 1 / -1;
   display: grid;
-  gap: 0.85rem;
+  gap: 0.9rem;
   margin-top: 1.25rem;
-  padding-top: 1.1rem;
+  padding-top: 1.15rem;
   border-top: 1px solid var(--surface0);
 }
 
+/* Wide enough: what it is over how it ships, the command beside both. */
+@container (min-width: 600px) {
+  .tool__spec {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 2rem;
+  }
+
+  .tool__try {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool__try dd {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool__try pre {
+    flex: 1;
+  }
+
+  .tool__try pre {
+    display: flex;
+    align-items: center;
+  }
+
+  /* The command scales with the card, so its longest line never wraps. */
+  .tool .tool__try pre {
+    font-size: clamp(0.7rem, 1.8cqi, 0.85rem);
+  }
+
+  .tool--lead .tool__try pre {
+    font-size: clamp(0.78rem, 2.1cqi, 0.95rem);
+  }
+}
+
 .tool__spec dt {
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.2rem;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -280,30 +411,30 @@ pre {
 }
 
 .tool__spec dd {
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   line-height: 1.5;
   color: var(--subtext0);
 }
 
 .tool__try dt {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
 }
 
 pre {
-  padding: 0.75rem 0.9rem;
+  padding: 0.85rem 1rem;
   border: 1px solid var(--surface0);
   border-radius: 10px;
   background-color: var(--crust);
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  line-height: 1.55;
+  font-size: 0.85rem;
+  line-height: 1.6;
   color: var(--a);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
-/* main.js makes each command a copy button; without script it stays selectable text. */
-/* The badge sits over the first line, which the two-line commands keep short. */
+/* main.js makes each command a copy button; without script it stays selectable text.
+   The badge sits over the first line, which the two-line commands keep short. */
 pre.is-copyable {
   position: relative;
   cursor: copy;
@@ -355,58 +486,21 @@ pre[data-copied] .copy {
   }
 }
 
-.tool__links {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: auto;
-  padding-top: 1rem;
-  font-size: 0.95rem;
-}
-
-.tool__links a {
-  white-space: nowrap;
-  margin-block: -0.75rem;
-  padding-block: 0.75rem;
-  border-radius: 6px;
-  color: var(--a);
-  text-decoration: none;
-}
-
-.tool__links a + a {
-  color: var(--b);
-}
-
-.tool__links a:hover,
-.org__link:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
-}
-
-.tool__links a:focus-visible,
-.org__link:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
-/* The lead: icon beside its name, facts in a row, the command at full width. */
+/* The lead: the same card, larger, with a wash of its own colour. */
 .tool--lead {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 2rem;
-  padding: 2.25rem 2.25rem 1.5rem;
-}
+  --mark: 104px;
 
-.tool--lead .tool__icon {
-  grid-row: 1 / span 2;
-  width: 112px;
-  height: 112px;
-  margin: 0;
+  column-gap: 1.75rem;
+  padding: 2.25rem 2.25rem 2rem;
+  background-image: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--a) 9%, var(--mantle)),
+    var(--mantle) 55%
+  );
 }
 
 .tool--lead .tool__name {
-  align-self: end;
-  font-size: clamp(1.9rem, 3vw, 2.5rem);
+  font-size: clamp(2rem, 3vw, 2.7rem);
   letter-spacing: -0.02em;
 }
 
@@ -414,228 +508,74 @@ pre[data-copied] .copy {
   font-size: 1.2rem;
 }
 
-.tool--lead .tool__spec,
 .tool--lead .tool__links {
-  grid-column: 1 / -1;
+  font-size: 1.05rem;
 }
 
 .tool--lead .tool__spec {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  column-gap: 2rem;
-  margin-top: 1.5rem;
-}
-
-.tool--lead .tool__try {
-  grid-column: 1 / -1;
-}
-
-.tool--lead pre {
-  padding: 1rem 1.2rem;
-  font-size: 0.95rem;
+  margin-top: 1.6rem;
+  padding-top: 1.4rem;
 }
 
 .tool--lead .tool__spec dd {
-  font-size: 1.02rem;
+  font-size: 1.08rem;
 }
 
-.tool--lead .tool__links {
-  font-size: 1.02rem;
+.tool--lead pre {
+  padding: 1.1rem 1.25rem;
+  font-size: 0.95rem;
 }
 
 /* ── Narrower screens ─────────────────────────────────────────────────── */
 
-/* Wide enough: a smaller tool's name sits left of its facts. */
-@media (min-width: 1000px) and (max-width: 1279px) {
-  .tool:not(.tool--lead) {
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
-    grid-template-rows: auto auto auto 1fr;
-    grid-template-areas:
-      "icon spec"
-      "name spec"
-      "tag spec"
-      "links spec";
-    column-gap: 2rem;
-  }
-
-  .tool:not(.tool--lead) .tool__icon {
-    grid-area: icon;
-  }
-
-  .tool:not(.tool--lead) .tool__name {
-    grid-area: name;
-  }
-
-  .tool:not(.tool--lead) .tool__tagline {
-    grid-area: tag;
-  }
-
-  .tool:not(.tool--lead) .tool__links {
-    grid-area: links;
-    align-self: end;
-  }
-
-  .tool:not(.tool--lead) .tool__spec {
-    grid-area: spec;
-    margin-top: 0;
-    padding-top: 0;
-    padding-left: 2rem;
-    border-top: 0;
-    border-left: 1px solid var(--surface0);
+@media (min-width: 1280px) {
+  .stream {
+    padding-inline: clamp(1.5rem, 3vw, 3rem);
   }
 }
 
-/* Wide screens: every card sits on one shared grid, so marks, names, facts and
-   commands line up down the page. */
-@media (min-width: 1280px) {
-  .stream {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 100vh;
-    padding: clamp(2rem, 6vh, 4.5rem) clamp(1.5rem, 3vw, 3rem);
+/* Links drop under the tagline when the header row runs out of room. */
+@media (max-width: 560px) {
+  .tool {
+    --mark: 56px;
+
+    column-gap: 1rem;
+    padding: 1.4rem 1rem 1.25rem;
   }
 
-  /* The first column carries the card's own left padding, which a subgrid takes from it. */
-  .tools {
-    grid-template-columns: calc(96px + 1.75rem) minmax(0, 9rem) minmax(0, 0.8fr) minmax(0, 1.4fr);
-    column-gap: 1.75rem;
-    row-gap: 1.25rem;
-    width: 100%;
-    max-width: 1180px;
-    margin-inline: auto;
-  }
-
-  /* Every card: mark and name on top, then what it is beside the command, then
-     links beside how it ships. The lead is the same card at a larger size. */
-  .tool,
   .tool--lead {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-template-rows: auto auto auto auto;
-    row-gap: 0.5rem;
-    padding: 1.6rem 1.75rem 1.4rem;
+    --mark: 72px;
   }
 
-  .tool .tool__spec {
-    display: contents;
+  .tool__icon {
+    grid-row: 1 / span 3;
+    align-self: start;
   }
 
-  .tool .tool__icon {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    align-self: center;
-    width: 80px;
-    height: 80px;
-    margin: 0;
-  }
-
-  .tool .tool__name {
-    grid-column: 2 / -1;
-    grid-row: 1;
-    align-self: end;
-    font-size: 1.5rem;
-  }
-
-  .tool .tool__tagline {
-    grid-column: 2 / -1;
-    grid-row: 2;
-    font-size: 1.02rem;
-  }
-
-  .tool .tool__spec > div:first-child,
-  .tool .tool__try {
-    margin-top: 0.75rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--surface0);
-  }
-
-  .tool .tool__spec > div:first-child {
-    grid-column: 2 / span 2;
-    grid-row: 3;
-  }
-
-  .tool .tool__links {
+  .tool__links {
     grid-column: 2;
-    grid-row: 4;
-    align-self: end;
-    padding-top: 0;
+    grid-row: 3;
+    align-self: start;
+    margin-top: 0.6rem;
   }
 
-  .tool .tool__spec > div:nth-child(2) {
-    grid-column: 3;
-    grid-row: 4;
-  }
-
-  .tool .tool__try {
-    grid-column: 4;
-    grid-row: 3 / span 2;
-  }
-
-  .tool--lead {
-    padding-block: 2rem 1.75rem;
-  }
-
-  .tool--lead .tool__icon {
-    width: 96px;
-    height: 96px;
+  .tool__name,
+  .tool--lead .tool__name {
+    font-size: 1.35rem;
   }
 
   .tool--lead .tool__name {
-    font-size: 2.4rem;
+    font-size: 1.7rem;
   }
 
   .tool--lead .tool__tagline {
-    font-size: 1.15rem;
-  }
-
-  .tool--lead .tool__spec > div:first-child dd,
-  .tool--lead .tool__links {
-    font-size: 1rem;
-  }
-
-  .tool--lead pre {
-    padding: 0.75rem 1rem;
-    font-size: clamp(0.78rem, 0.9vw, 0.9rem);
-  }
-
-  .tool__spec dd {
-    font-size: 0.95rem;
-  }
-
-  pre {
-    font-size: clamp(0.76rem, 0.85vw, 0.85rem);
-  }
-}
-
-/* The narrowest wide screens: more room for the command column. */
-@media (min-width: 1280px) and (max-width: 1439px) {
-  .tools {
-    grid-template-columns: calc(80px + 1.75rem) minmax(0, 8.5rem) minmax(0, 0.8fr) minmax(0, 1.45fr);
-    column-gap: 1.4rem;
-  }
-
-  .tool .tool__icon {
-    width: 64px;
-    height: 64px;
-  }
-
-  .tool--lead .tool__icon {
-    width: 80px;
-    height: 80px;
+    font-size: 1.05rem;
   }
 
   pre,
   .tool--lead pre {
-    padding-inline: 0.75rem;
-    font-size: 0.72rem;
-  }
-
-  .tool__links,
-  .tool--lead .tool__links {
-    gap: 1.1rem;
-    font-size: 0.9rem;
+    padding: 0.75rem 0.7rem;
+    font-size: 0.78rem;
   }
 }
 
@@ -681,6 +621,11 @@ pre[data-copied] .copy {
     max-width: none;
   }
 
+  .family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1rem;
+  }
+
   .org__about {
     margin-top: 1.25rem;
   }
@@ -694,27 +639,8 @@ pre[data-copied] .copy {
   }
 
   .stream {
-    padding: 1.5rem calc(1.25rem + env(safe-area-inset-right)) calc(2.5rem + env(safe-area-inset-bottom))
-      calc(1.25rem + env(safe-area-inset-left));
-  }
-
-  .tool--lead {
-    padding: 1.75rem 1.5rem 1.25rem;
-    column-gap: 1.25rem;
-  }
-
-  .tool--lead .tool__icon {
-    width: 72px;
-    height: 72px;
-  }
-
-  .tool--lead .tool__spec {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  pre,
-  .tool--lead pre {
-    font-size: 0.7rem;
+    padding: 1.5rem calc(1rem + env(safe-area-inset-right)) calc(2.5rem + env(safe-area-inset-bottom))
+      calc(1rem + env(safe-area-inset-left));
   }
 }
 
@@ -743,12 +669,22 @@ pre[data-copied] .copy {
   display: inline-block;
   margin-top: 1rem;
   padding-block: 0.75rem;
-  color: var(--lavender);
+  color: var(--red);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .tool,
-  .copy {
+  .copy,
+  .family a,
+  .family a::before {
     transition: none;
   }
 }
