@@ -33,7 +33,7 @@ Every container carries two labels, for finding them while a session runs:
 | `com.kloudkit.testshed.test`  | The test that started a `shed` container *(its pytest node ID, or `shed_default`)*. |
 
 ```sh
-docker ps --filter label=com.kloudkit.testshed
+docker ps -a --filter label=com.kloudkit.testshed
 ```
 
 Pressing `Ctrl-C` stops the session and still runs the cleanup; it can take a moment.

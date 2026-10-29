@@ -113,6 +113,15 @@ The test fails with what the probe waited for, such as
 `URL [http://localhost:3000/health] was not reachable within 30.0s`.
 Run with `--shed-container-logs` to see the container's logs as well.
 
+If the container exits before the probe passes, the test fails at once instead of waiting
+out the timeout, with the exit code and the last 20 lines of the container's logs:
+
+```text
+Container exited with code 1 before it was ready: URL [http://localhost:3000/health] was not reachable within 30.0s
+--- last 20 lines of its logs ---
+Error: listen EADDRINUSE: address already in use :::3000
+```
+
 ## Next Steps
 
 - [Containers](./containers#suite-wide-defaults): set a default probe for the whole suite.
