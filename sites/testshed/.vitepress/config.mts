@@ -28,6 +28,7 @@ export default defineSite({
         { text: 'Readiness Probes', link: '/guide/readiness-probes' },
         { text: 'Playwright Browsers', link: '/guide/playwright-browsers' },
         { text: 'Cleanup and Parallel Runs', link: '/guide/cleanup' },
+        { text: 'Agent Skill', link: '/guide/agent-skill' },
       ],
     },
     {
