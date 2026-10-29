@@ -37,6 +37,20 @@ def test_app_page(shed, playwright_browser):
   page.goto(f"http://{shed.ip()}:3000")
 ```
 
+## Use the Clipboard
+
+Pages and contexts the browser opens get the `clipboard-read` and `clipboard-write`
+permissions, so tests can copy and paste.
+Permissions you pass to `new_page` or `new_context` are added to them:
+
+```python
+def test_paste(playwright_browser):
+  page = playwright_browser.new_page(permissions=["geolocation"])
+```
+
+The page needs a secure origin *(`https`, or `localhost`)* for `navigator.clipboard` to exist.
+`playwright_browser.wrapped` is the plain Playwright `Browser`, without the extra permissions.
+
 ## Which Image
 
 The container runs `mcr.microsoft.com/playwright` at the same version as the `playwright`

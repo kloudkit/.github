@@ -20,7 +20,7 @@ Markers are imported from `kloudkit.testshed.docker.decorators` when you apply t
 | `docker_sidecar`         | function | `docker_sidecar(image, **kwargs)`: starts a container from any image.         |
 | `docker_module_sidecar`  | module   | Same as `docker_sidecar`, removed after the module.                           |
 | `docker_session_sidecar` | session  | Same as `docker_sidecar`, removed after the session.                          |
-| `playwright_browser`     | session  | A Playwright `Browser` connected to Chromium in a container.                  |
+| `playwright_browser`     | session  | A Playwright `Browser` connected to Chromium in a container, with clipboard permissions. |
 
 ## Settings and Paths
 
