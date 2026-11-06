@@ -229,6 +229,20 @@ pre {
   color: var(--overlay2);
 }
 
+.footer a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+.footer a:hover {
+  color: var(--text);
+}
+
+.footer a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 /* ── Tool stream ──────────────────────────────────────────────────────── */
 
 .stream {
