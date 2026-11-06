@@ -9,7 +9,7 @@ These are community-driven, open-source projects; **we do not provide commercial
 | ------------------- | ---------------------------------------- |
 | 📚 Documentation     | The repository's README                  |
 | 🐞 Bugs / Ideas      | The repository's GitHub Issues           |
-| 🔒 Sensitive issues  | <info@kloudkit.com>                      |
+| 🔒 Sensitive issues  | <info@kloud.email>                       |
 
 **Kloud Workspace** *(the `workspace` and `ws-*` repositories)* has its docs at
 <https://ws.kloudkit.com>, and takes questions, ideas and bugs in [ws-meta][]

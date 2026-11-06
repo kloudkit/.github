@@ -1,7 +1,7 @@
 # Security Policy
 
 If you believe you have found a vulnerability in a [KloudKIT](https://kloudkit.com) project,
-**please email <info@kloudkit.com>** or open a private advisory from the repository's
+**please email <info@kloud.email>** or open a private advisory from the repository's
 **Security** tab, with a clear description and a proof of concept *(if applicable)*.
 
 Please don't open a public issue for it.
