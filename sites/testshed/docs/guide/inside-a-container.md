@@ -10,7 +10,8 @@ same helpers: `execute` runs commands, `fs` reads files and `proc` inspects proc
 ## At a Glance
 
 - A container from any TestShed fixture.
-- The image needs the tools the helpers call: a shell, `test`, `ls`, `stat`, `grep` and `tr`.
+- The image needs the tools the helpers call: a shell, `test`, `ls`, `stat`, `grep`, `tr` and
+  `cat`.
 
 ## Run Commands With `execute`
 
@@ -53,6 +54,29 @@ def test_missing_file(shed):
 
 With `--shed-container-logs`, the container's logs are printed when a command fails the test.
 
+### Check the Exit Code
+
+Pass `check=False` to get a `Result` instead of failing the test.
+It works the same with `execute.bash`, `execute.sh` and `execute.zsh`:
+
+```python
+def test_exit_code(shed):
+  result = shed.execute("grep -q nope /etc/hostname", check=False)
+
+  assert result.exit_code == 1
+  assert not result.ok
+
+  result = shed.execute.bash("echo out; echo warn >&2", check=False)
+
+  assert result.stdout == "out"
+  assert result.stderr == "warn"
+```
+
+`Result` holds `exit_code`, `ok`, `stdout` and `stderr`, each stream without its trailing
+newline, and keeps `stderr` when the command succeeds too.
+With `check=False`, only `user`, `workdir` and `envs` are passed on, and a missing container
+still fails the test.
+
 ## Read Files With `fs`
 
 ```python
@@ -64,14 +88,19 @@ def test_files(shed):
   raw = shed.fs.bytes("/etc/hostname")
   config = shed.fs.json("/app/config.json")
   manifest = shed.fs.yaml("/app/manifest.yaml")
+  project = shed.fs.toml("/app/pyproject.toml")
 
   assert shed.fs.mode("/etc/hostname") == "644"
   assert shed.fs.owner("/etc/hostname") == "root"
   assert shed.fs.group("/etc/hostname") == "root"
+
+  assert shed.fs.writable("/tmp")
+  assert not shed.fs.writable("/etc/passwd", user="nobody")
 ```
 
 Files are copied out of the container, so reading works even when the path isn't readable
 by the container's default user.
+`writable` asks as the command's user, or the `user=` you pass.
 
 ## Inspect Processes With `proc`
 
@@ -92,6 +121,13 @@ The kernel cuts process names at 15 characters, so look up a long name by its fi
 
 - **`ip()`:** the container's address on the session's network.
 - **`whoami()`:** the user commands run as.
+- **`which(name)`:** the path of the executable `name` on the shell's `PATH`, or `None`.
+  It gives the same answers as `which`, without needing `which` in the image: shell builtins
+  resolve to their binary and aliases and functions are not found.
+- **`env()` / `env(name)`:** the environment commands see, as a dict, or one value
+  *(`None` when unset)*.
+  Unlike `proc.environ()`, which reads PID 1, it includes what the shell's profile or
+  activation exports.
 - **`wrapped`:** the underlying python-on-whales container, with its exact type.
 - **`name`, `id`, `logs()`, …:** anything else is passed to the underlying
   [python-on-whales](https://gabrieldemarmiesse.github.io/python-on-whales/) container.
