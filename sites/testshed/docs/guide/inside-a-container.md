@@ -121,9 +121,6 @@ The kernel cuts process names at 15 characters, so look up a long name by its fi
 
 - **`ip()`:** the container's address on the session's network.
 - **`whoami()`:** the user commands run as.
-- **`which(name)`:** the path of the executable `name` on the shell's `PATH`, or `None`.
-  It gives the same answers as `which`, without needing `which` in the image: shell builtins
-  resolve to their binary and aliases and functions are not found.
 - **`env()` / `env(name)`:** the environment commands see, as a dict, or one value
   *(`None` when unset)*.
   Unlike `proc.environ()`, which reads PID 1, it includes what the shell's profile or
