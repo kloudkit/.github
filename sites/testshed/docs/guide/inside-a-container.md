@@ -10,8 +10,8 @@ same helpers: `execute` runs commands, `fs` reads files and `proc` inspects proc
 ## At a Glance
 
 - A container from any TestShed fixture.
-- The image needs the tools the helpers call: a shell, `test`, `ls`, `stat`, `grep`, `tr` and
-  `cat`.
+- The image needs the tools the helpers call: a shell, `test`, `ls`, `stat`, `tr`,
+  `cat` and `tail`.
 
 ## Run Commands With `execute`
 
@@ -110,11 +110,15 @@ def test_processes(shed):
   assert shed.proc.pids("nginx")                   # tuple of matching PIDs
 
   assert "nginx" in shed.proc.cmdline("nginx")     # command line of the first match
+  assert shed.proc.pids("sleep infinity", full=True)    # match the command line
   assert shed.proc.environ()["PATH"]               # environment of PID 1
 ```
 
 Names match the process name exactly.
 The kernel cuts process names at 15 characters, so look up a long name by its first 15.
+`full=True` on `pids`, `running` and `cmdline` matches the command line instead, its
+arguments joined with spaces, as `pgrep -f` does.
+PIDs come lowest first.
 `cmdline` raises `LookupError` when nothing matches, and `environ` takes another PID.
 
 ## The Container Itself

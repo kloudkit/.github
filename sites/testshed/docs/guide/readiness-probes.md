@@ -81,6 +81,29 @@ def test_slow_boot(shed):
   ...
 ```
 
+## Wait Mid-Test
+
+`wait()` runs the container's own probe again, with the same retries, timeout and early
+failure when the container exits. `probe=` and `timeout=` override it as in `@shed_config`:
+
+```python
+from kloudkit.testshed.docker import LogProbe, ShellProbe
+
+def test_restart(shed):
+  shed.execute("service app restart")
+  shed.wait()                                            # the probe it started with
+
+  shed.wait(timeout=90)                                  # own probe, longer
+
+  shed.execute("app reindex &")
+  shed.wait(probe=ShellProbe(command="test -e /tmp/indexed"), timeout=60)
+  shed.wait(probe=LogProbe(pattern=r"reindex done"))
+```
+
+They combine with the container's probe exactly as they do at startup
+*(see [Override the Default Probe](#override-the-default-probe))*.
+A container started without a probe *(or attached with `shed_attach`)* needs one passed in.
+
 ## Write Your Own
 
 Subclass `Probe` with a `check` that raises until the container is ready, and a
