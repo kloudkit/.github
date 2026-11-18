@@ -110,7 +110,7 @@ def test_processes(shed):
   assert shed.proc.pids("nginx")                   # tuple of matching PIDs
 
   assert "nginx" in shed.proc.cmdline("nginx")     # command line of the first match
-  assert shed.proc.pids("nginx -g daemon off", full=True)
+  assert shed.proc.pids("sleep infinity", full=True)    # match the command line
   assert shed.proc.environ()["PATH"]               # environment of PID 1
 ```
 
