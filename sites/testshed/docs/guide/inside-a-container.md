@@ -10,7 +10,7 @@ same helpers: `execute` runs commands, `fs` reads files and `proc` inspects proc
 ## At a Glance
 
 - A container from any TestShed fixture.
-- The image needs the tools the helpers call: a shell, `test`, `ls`, `stat`, `grep`, `tr`,
+- The image needs the tools the helpers call: a shell, `test`, `ls`, `stat`, `tr`,
   `cat` and `tail`.
 
 ## Run Commands With `execute`
