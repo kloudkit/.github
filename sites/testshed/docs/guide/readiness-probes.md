@@ -37,6 +37,7 @@ ShellProbe(command="pg_isready -U postgres", timeout=30.0)
   `execute`.
 
 Each probe retries every 100 ms, for up to `timeout` seconds *(30 by default)*.
+An attempt that hangs runs past `timeout`, so bound a command that can hang *(`curl -m 5`)*.
 
 ## Use a Probe
 
@@ -132,8 +133,13 @@ test instead of retrying.
 
 ## When a Probe Times Out
 
-The test fails with what the probe waited for, such as
-`URL [http://localhost:3000/health] was not reachable within 30.0s`.
+The test fails with what the probe waited for and the error of its last attempt:
+
+```text
+URL [http://localhost:3000/health] was not reachable within 30.0s
+Last attempt: /bin/sh: 1: curl: not found
+```
+
 Run with `--shed-container-logs` to see the container's logs as well.
 
 If the container exits before the probe passes, the test fails at once instead of waiting

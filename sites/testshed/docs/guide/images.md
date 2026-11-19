@@ -15,15 +15,15 @@ TestShed gets it before the first test, pulling or building it as the image poli
 ## Tags and Digests
 
 `--shed-tag` takes a tag or a digest.
-A value starting with `sha` is used as a digest, so the image can't change under you:
+A value with a `:` *(`sha256:…`)* is used as a digest, so the image can't change under you:
 
 ```sh
 pytest --shed --shed-image=ghcr.io/acme/app --shed-tag=pr-563
 pytest --shed --shed-image=ghcr.io/acme/app --shed-tag=sha256:9f86d0…
 ```
 
-`--shed-image` can't contain `:` or `@`, so a registry with a port *(`localhost:5000/app`)*
-is rejected too.
+`--shed-image` can't carry a tag or digest itself, but a registry with a port
+*(`localhost:5000/app`)* works.
 
 The `shed_tag` fixture holds the result *(`ghcr.io/acme/app:pr-563`, or
 `ghcr.io/acme/app@sha256:…`)*, for tests that start their own containers from the same image.
