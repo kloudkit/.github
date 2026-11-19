@@ -66,6 +66,8 @@ build context.
 `--shed-skip-bootstrap` skips the image and the network, for a run of tests that don't start
 containers *(a unit test subset, say)*.
 TestShed's fixtures are still registered, but containers can't start without the network.
+`--collect-only`, `--help`, `--fixtures` and `--markers` skip the image and the network on
+their own, since they run no tests.
 
 ## Next Steps
 
